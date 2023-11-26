@@ -74,12 +74,20 @@ class ProductManager {
     // Método para eliminar un producto por su ID.
     deleteProductsById = async (id) => {
         let thirdAnswer = await this.readProducts();
-        const filter = thirdAnswer.filter(productos => productos.id != id);
+        const foundProduct = thirdAnswer.find(productos => productos.id === id);
 
-        // Escribe la lista filtrada en el archivo.
-        await fs.writeFile(this.patch, JSON.stringify(filter));
-        console.log("Producto eliminado");
+        if (!foundProduct) {
+            console.log("No se logró encontrar el producto para eliminar");
+            return;
+        }else{
+            const filter = thirdAnswer.filter(productos => productos.id !== id);
+
+            // Escribe la lista filtrada en el archivo.
+            await fs.writeFile(this.patch, JSON.stringify(filter));
+            console.log("Producto eliminado");
+        }
     };
+
 
     // Método para actualizar un producto por su ID.
     updateProducts = async (updatedFiles) => {
